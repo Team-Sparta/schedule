@@ -51,3 +51,6 @@ UPDATE Tasks SET status = "Completed" WHERE id = 1;
 
 # Delete a task by ID
 DELETE FROM tasks WHERE id = 1;
+
+# Select all categories 
+SELECT * FROM Categories;
