@@ -1,6 +1,5 @@
 # todo-list
-![Untitled](https://github.com/user-attachments/assets/ca44bdad-9dd2-4c7c-9b9d-8215c93e853b)
-
+![Untitled-3](https://github.com/user-attachments/assets/977fdaf6-3ddf-4a78-82a7-cb244d327e9a)
 
 
 
