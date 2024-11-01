@@ -39,8 +39,8 @@
 
 #### Result
 
-| Name                    | Type        |   Description |
-| ----------------------- | ----------- | -------------|
+| Name                    | Type       |   Description |
+| ----------------------- | ---------- | ------------- |
 | **id**                  |  `Integer` |  User's id    |
 | **userName**            |  `String`  |  User's name  |
 | **email**               |  `String`  |  User's email |
@@ -80,7 +80,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `POST`     | https://localhost:8080/api/v1/api/users| 
+| `POST`     | https://http://localhost:8080/api/v1/users| 
 
 
 ### Request Body
@@ -143,7 +143,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `POST`     | https://localhost:8080/api/v1/tasks| 
+| `POST`     | http://localhost:8080/api/v1/tasks| 
 
 
 ### Request Body
@@ -240,7 +240,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `GET`     | https://localhost:8080/api/v1/tasks/{taskId}| 
+| `GET`     | http://localhost:8080/api/v1/tasks/{taskId}| 
 
 
 ### Parameters
@@ -325,7 +325,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `GET`      | https://localhost:8080/api/v1/tasks/{taskId}?userId={userId}&priority={priority}&status={status}&page={page}&lastTaskId={lastTaskId} | 
+| `GET`      | http://localhost:8080/api/v1/tasks/{taskId}?userId={userId}&priority={priority}&status={status}&page={page}&lastTaskId={lastTaskId} | 
 
 
 ### Query
@@ -418,7 +418,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `PUT`      | https://localhost:8080/api/v1/tasks/{taskId}| 
+| `PUT`      | http://localhost:8080/api/v1/tasks/{taskId}| 
 
 ### Parameters
 
@@ -522,7 +522,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `PATCH`      | https://localhost:8080/api/v1/tasks/{taskId}| 
+| `PATCH`      | http://localhost:8080/api/v1/tasks/{taskId}| 
 
 
 ### Parameters
@@ -620,7 +620,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `DELETE`      | https://localhost:8080/api/v1/tasks/{taskId}| 
+| `DELETE`      | http://localhost:8080/api/v1/tasks/{taskId}| 
 
 
 ### Request Parameters
@@ -681,7 +681,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `GET`      | https://localhost:8080/api/v1/categories| 
+| `GET`      | http://localhost:8080/api/v1/categories| 
 
 ### Response Body
 
