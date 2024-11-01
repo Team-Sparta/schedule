@@ -2,10 +2,9 @@
 ![Untitled-5](https://github.com/user-attachments/assets/e460714f-ac9b-4836-8218-0c6196373ba0)
 
 
-
 | Feature                         | Method  |         URL             |
 | ------------------------------- | ------- | ----------------------- |
-| **Get User**                    | `GET`  |   /api/v1/users       |
+| **Get My Info**                 | `POST`  |   /api/v1/my-info       |
 | **Register User**               | `POST`  |   /api/v1/users         |
 | **Add Task**                    | `POST`  |   /api/v1/tasks         |
 | **Get All Task**                | `GET`   |   /api/v1/tasks         |
@@ -15,28 +14,26 @@
 | **Delete Task by Id**           | `DELETE`|   /api/v1/tasks/{id}    |
 | **Get All Categories**          | `GET`   |   /api/v1/categories    |
 
+## Get My Info
 
-## Get User
-
-| Method     | URL                                  | 
-| ---------- | ------------------------------------ | 
-| `GET`     | https://localhost:8080/api/v1/users?userName={userName}&email={email}&password={password}| 
+| Method     | URL                                   | 
+| ---------- | ------------------------------------- | 
+| `POST`     | https://localhost:8080/api/v1/my-info | 
 
 ### Request Body
 
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
 | **userName**            | `String`    |       Y       |
-| **email**               | `String`    |       Y       |
 | **password**            | `String`    |       Y       |
 
 ### Response Body
 
 #### Main
 
-| Name                    | Type        |     Description    |
+| Name                    |  Type       |     Description    |
 | ----------------------- | ----------- | ------------------ |
-| **success**             |  `Boolean`  |   Indicates whether the request was successful.  |
+| **success**             |  `Boolean`  | Indicates whether the request was successful. |
 | **message**             |  `String`   | Response's Message |
 | **result**              |  `Result`   | Response's Result  |
 
@@ -49,7 +46,6 @@
 | **email**               |  `String`  |  User's email |
 
 
-
 ### Example
 
 #### Request
@@ -58,8 +54,7 @@
 curl -X POST https://localhost:8080/api/v1/my-info \
   -H "Content-Type: application/json" \
   -d '{    
-    "userName": "youngjun",
-    "email": "youngjun@gmail.com",
+    "userName": "youngjun",    
     "password": "youngjun123"
   }'
 ```
@@ -156,7 +151,6 @@ Content-Type: application/json;charset=UTF-8
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
 | **userId**              | `Interger`  |       Y       |
-| **password**            | `String`    |       Y       |
 | **categoryName**        | `String`    |       Y       |
 | **content**             | `String`    |       Y       |
 | **dueDate**             | `String`    |       Y       |
@@ -207,8 +201,7 @@ Content-Type: application/json;charset=UTF-8
 curl -X POST https://localhost:8080/api/v1/tasks \
   -H "Content-Type: application/json" \
   -d '{
-      "userId": 123,
-      "password": "password123",
+      "userId": 123,      
       "categoryName": "Work",
       "content": "updated content body",
       "dueDate": "2024-11-05",
@@ -262,21 +255,21 @@ Content-Type: application/json;charset=UTF-8
 
 | Name                    | Type        |     Description    |
 | ----------------------- | ----------- | ------------------ |
-| **success**             |  `Boolean`  |   Indicates whether the request was successful.  |
+| **success**             |  `Boolean`  | Indicates whether the request was successful.  |
 | **message**             |  `String`   | Response's Message |
 | **result**              |  `Result`   | Response's Result  |
 
 #### Result
 
-| Name                    | Type        |   Description |
-| ----------------------- | ----------- | ------------- |
-| **taskId**              |  `Integer`  |  Task's id    |
-| **content**             |  `String`   |  Task's Content  |
-| **dueDate**             |  `String`   |  Task's Deadline Date |
-| **priority**            |  `String`   |  Taks's Priority ["Low", "Medium", "High"] |
-| **status**              |  `String`   |  Task's Status ["Pending", "Progress", "Completed"] |
-| **categoryInfo**        |  CategoryInfo  |  Taks's Category |
-| **userInfo**            |  UserInfo   |  User's Information |
+| Name                    | Type          |  Description  |
+| ----------------------- | ------------- | ------------- |
+| **taskId**              |  `Integer`    |  Task's id    |
+| **content**             |  `String`     |  Task's Content  |
+| **dueDate**             |  `String`     |  Task's Deadline Date |
+| **priority**            |  `String`     |  Taks's Priority ["Low", "Medium", "High"] |
+| **status**              |  `String`     |  Task's Status ["Pending", "Progress", "Completed"] |
+| **categoryInfo**        |  CategoryInfo |  Taks's Category |
+| **userInfo**            |  UserInfo     |  User's Information |
 
 #### CategoryInfo
 
@@ -332,7 +325,7 @@ Content-Type: application/json;charset=UTF-8
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
-| `GET`      | https://localhost:8080/api/v1/tasks/{taskId}?userId={userId}=&password={password}&priority={priority}&status={status}&page={page}&lastTaskId={lastTaskId} | 
+| `GET`      | https://localhost:8080/api/v1/tasks/{taskId}?userId={userId}&priority={priority}&status={status}&page={page}&lastTaskId={lastTaskId} | 
 
 
 ### Query
@@ -340,11 +333,9 @@ Content-Type: application/json;charset=UTF-8
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- |  ------------ |
 | **userId**              | `String`    |  Y |
-| **password**            | `String`    |  Y |
 | **priority**            | `String`    |  N |
 | **status**              | `String`    |  N |
 | **page**                | `Interger`  |  Y |
-| **lastTaskId**          | `Interger`  |  N |
 
 ### Response Body
 
@@ -394,7 +385,7 @@ Content-Type: application/json;charset=UTF-8
 
 #### Request
 ```
-curl -X GET https://localhost:8080/api/v1/tasks?userId=12=&password=1234&priority=Medium&status=Completed&page=1&lastTaskId=2
+curl -X GET https://localhost:8080/api/v1/tasks?userId=12&priority=Medium&status=Completed&page=1
 ```
 
 #### Response
@@ -441,7 +432,6 @@ Content-Type: application/json;charset=UTF-8
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
 | **userId**              | `Interger`  |       Y       |
-| **password**            | `String`    |       Y       |
 | **categoryId**          | `Interger`  |       Y       |
 | **content**             | `String`    |       Y       |
 | **dueDate**             | `String`    |       Y       |
@@ -491,8 +481,7 @@ Content-Type: application/json;charset=UTF-8
 curl -X PUT https://localhost:8080/api/v1/tasks/1 \
   -H "Content-Type: application/json" \
   -d '{
-    "userId": 123,
-    "password": "password123",
+    "userId": 123,    
     "categoryId": 1,
     "content": "updated content body",
     "dueDate": "2024-11-05",
@@ -548,7 +537,6 @@ Content-Type: application/json;charset=UTF-8
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
 | **userId**              | `Interger`  |       Y       |
-| **password**            | `String`    |       Y       |
 | **priority**            | `String`    |       Y       |
 
 
@@ -596,8 +584,7 @@ Content-Type: application/json;charset=UTF-8
 curl -X FETCH https://localhost:8080/api/v1/tasks/1 \
   -H "Content-Type: application/json" \
   -d '{
-      "userId": 123,
-      "password": "password123",
+      "userId": 123,      
       "priority": "High",    
     }'
 ```
@@ -629,7 +616,6 @@ Content-Type: application/json;charset=UTF-8
 ```
 
 
-
 ## Delete Task By Id
 
 | Method     | URL                                  | 
@@ -649,7 +635,6 @@ Content-Type: application/json;charset=UTF-8
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
 | **userId**              | `Interger`  |       Y       |
-| **password**            | `String`    |       Y       |
 
 
 ### Response Body
@@ -674,8 +659,7 @@ Content-Type: application/json;charset=UTF-8
 curl -X DELETE https://localhost:8080/api/v1/tasks/1 \
   -H "Content-Type: application/json" \
   -d '{
-    "userId": 123,
-    "password": "password123",   
+    "userId": 123,    
     }'
 ```
 
@@ -755,28 +739,20 @@ Content-Type: application/json;charset=UTF-8
 }
 ```
 
-
-
-
-
-
 ## Error Code 
 
-| HTTP Status | Message                               | Description                                                  |
-|-------------|---------------------------------------|--------------------------------------------------------------|
+| HTTP Status | Message                              | Description                                                  |
+|-------------|--------------------------------------| ------------------------------------------------------------ |
 | 400         | Invalid request data                 | One or more required fields are missing or invalid           |
 | 400         | Invalid parameter                    | An invalid or missing parameter, e.g., `taskId`              |
 | 401         | Unauthorized access                  | Incorrect or missing authentication credentials              |
-| 401         | Permission denied                    | User lacks permission to modify this tasks                    |
+| 401         | Permission denied                    | User lacks permission to modify this tasks                   |
 | 403         | Forbidden                            | User action not allowed                                      |
 | 404         | User not found                       | User with the given ID was not found                         |
 | 404         | Task not found                       | Task with the specified ID does not exist                    |
 | 404         | Category not found                   | Category with the specified ID does not exist                |
-| 409         | Duplicate entry                      | User or tasks already exists                                  |
+| 409         | Duplicate entry                      | User or tasks already exists                                 |
 | 500         | Internal server error                | General server error                                         |
 | 503         | Service unavailable                  | Database or required service is currently unavailable        |
-
-
-
 
 
