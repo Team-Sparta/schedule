@@ -19,14 +19,14 @@
 
 ### GET - /api/v1/user 
 
+### Request Body
+
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
 | **userName**            | `String`    |       O       |
 | **email**               | `String`    |       O       |
 | **password**            | `String`    |       O       |
 
-
-### Request Body
 
 ```
   {
@@ -59,15 +59,14 @@ Status Code: 200
 
 ### POST - /api/v1/user 
 
+### Request Body
+
 
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
 | **userName**            | `String`    |       O       |
 | **email**               | `String`    |       O       |
 | **password**            | `String`    |       O       |
-
-
-### Request Body
 
 ```
   {
@@ -96,6 +95,7 @@ Status Code: 200
 
 ### POST - /api/v1/task 
 
+### Request Body
 
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
@@ -106,8 +106,6 @@ Status Code: 200
 | **dueDate**             | `String`    |       O       |
 | **priority**            | `String`    |       X       |
 | **status**              | `String`    |       X       |
-
-### Request Body
 
 ```
   {
@@ -226,6 +224,7 @@ Status Code: 200
   ]    
  }
 }
+
 ```
 
 ## Update Task By Id
@@ -237,6 +236,8 @@ Status Code: 200
 | ----------------------- | ----------- |
 | **taskId**              | `Interger`  |
 
+### Request Body
+
 
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
@@ -247,8 +248,6 @@ Status Code: 200
 | **dueDate**             | `String`    |       O       |
 | **priority**            | `String`    |       O       |
 | **status**              | `String`    |       O       |
-
-### Request Body
 
 ```
   {
@@ -298,13 +297,13 @@ Status Code: 200
 | **taskId**              | `Interger`  |
 
 
+### Request Body
+
 | Name                    | Type        |   Required    |
 | ----------------------- | ----------- | ------------- |
 | **userId**              | `Interger`  |       O       |
 | **password**            | `String`    |       O       |
 | **priority**            | `String`    |       O       |
-
-### Request Body
 
 ```
   {
