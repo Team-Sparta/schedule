@@ -1,11 +1,11 @@
 # todo-list
-![Untitled-3](https://github.com/user-attachments/assets/977fdaf6-3ddf-4a78-82a7-cb244d327e9a)
-
+![Untitled-5](https://github.com/user-attachments/assets/e460714f-ac9b-4836-8218-0c6196373ba0)
 
 
 
 | Feature                         | Method  |         url             |
 | ------------------------------- | ------- | ----------------------- |
+| **Get User**                    | `GET`   |   /api/v1/user          |
 | **Register User**               | `POST`  |   /api/v1/user          |
 | **Add Task**                    | `POST`  |   /api/v1/task          |
 | **Get Task By Id**              | `GET`   |   /api/v1/task/{id}     |
@@ -15,7 +15,57 @@
 | **Delete Task by Id**           | `DELETE`|   /api/v1/task/{id}     |
 
 
-## POST /api/v1/user - Register User
+## Get User
+
+### GET - /api/v1/user 
+
+| Name                    | Type        |   Required    |
+| ----------------------- | ----------- | ------------- |
+| **userName**            | `String`    |       O       |
+| **email**               | `String`    |       O       |
+| **password**            | `String`    |       O       |
+
+
+### Request Body
+
+```
+  {
+    id : 1,
+    userName: youngjun,
+    email: "youngjun@gmail.com",
+    password: youngjun123,    
+  }
+```
+
+### Responses
+
+Status Code: 200
+
+```
+{
+  success : true,
+  message : "Response Message",
+  result: {
+    id: 123,
+    username: "youngjun",
+    email: "youngjun@gmail.com",
+  }
+}
+```
+
+
+
+## Register User
+
+### POST - /api/v1/user 
+
+
+| Name                    | Type        |   Required    |
+| ----------------------- | ----------- | ------------- |
+| **userName**            | `String`    |       O       |
+| **email**               | `String`    |       O       |
+| **password**            | `String`    |       O       |
+
 
 ### Request Body
 
@@ -34,13 +84,28 @@ Status Code: 200
 {
   success : true,
   message : "Response Message",
-  id: 123,
-  username: "youngjun",
-  email: "youngjun@gmail.com",
+  result: {
+    id: 123,
+    username: "youngjun",
+    email: "youngjun@gmail.com",
+  }
 }
 ```
 
-## POST /api/v1/task - Add Task
+## Add Task
+
+### POST - /api/v1/task 
+
+
+| Name                    | Type        |   Required    |
+| ----------------------- | ----------- | ------------- |
+| **userId**              | `Interger`  |       O       |
+| **password**            | `String`    |       O       |
+| **categoryId**          | `String`    |       O       |
+| **content**             | `String`    |       O       |
+| **dueDate**             | `String`    |       O       |
+| **priority**            | `String`    |       X       |
+| **status**              | `String`    |       X       |
 
 ### Request Body
 
@@ -82,7 +147,9 @@ Status Code: 201
 }
 ```
 
-## GET /api/v1/task/{taskId} - Get Task By ID
+## Get Task By ID
+
+### GET - /api/v1/task/{taskId}
 
 ### Parameters
 
@@ -117,16 +184,17 @@ Status Code: 200
 }
 ```
 
-## GET /api/v1/tasks - Get Tasks
+## Get Tasks
+### GET - /api/v1/tasks
 
 ### Request Query
 
-| Name                    | Type        |
-| ----------------------- | ----------- |
-| **priority**            | `String`    |
-| **status**              | `String`    |
-| **page**                | `Interger`  |
-| **lastTaskId**          | `Interger`  |
+| Name                    | Type        |   Required    |
+| ----------------------- | ----------- |  ------------ |
+| **priority**            | `String`    |  X |
+| **status**              | `String`    |  X |
+| **page**                | `Interger`  |  O |
+| **lastTaskId**          | `Interger`  |  X |
 
 
 ### Responses
@@ -160,7 +228,8 @@ Status Code: 200
 }
 ```
 
-## PUT /api/v1/task/{taskId} - Update Task By Id
+## Update Task By Id
+### PUT - /api/v1/task/{taskId}
 
 ### Parameters
 
@@ -168,12 +237,23 @@ Status Code: 200
 | ----------------------- | ----------- |
 | **taskId**              | `Interger`  |
 
+
+| Name                    | Type        |   Required    |
+| ----------------------- | ----------- | ------------- |
+| **userId**              | `Interger`  |       O       |
+| **password**            | `String`    |       O       |
+| **categoryId**          | `Interger`  |       O       |
+| **content**             | `String`    |       O       |
+| **dueDate**             | `String`    |       O       |
+| **priority**            | `String`    |       O       |
+| **status**              | `String`    |       O       |
+
 ### Request Body
 
 ```
   {
     userId: 123,
-    userPassword: "password123",
+    password: "password123",
     content: "updated content body",
     due_date: "2024-11-05",
     priority: "Medium",
@@ -208,7 +288,8 @@ Status Code: 200
 ```
 
 
-## PATCH /api/v1/task/{taskId} - Update Task's Priority By Id
+## Update Task's Priority By Id
+### PATCH - /api/v1/task/{taskId}
 
 ### Parameters
 
@@ -216,14 +297,20 @@ Status Code: 200
 | ----------------------- | ----------- |
 | **taskId**              | `Interger`  |
 
+
+| Name                    | Type        |   Required    |
+| ----------------------- | ----------- | ------------- |
+| **userId**              | `Interger`  |       O       |
+| **password**            | `String`    |       O       |
+| **priority**            | `String`    |       O       |
+
 ### Request Body
 
 ```
   {
     userId: 123,
-    userPassword: "password123",
-    priority: "High",
-    status: "Pending"
+    password: "password123",
+    priority: "High",    
   }
 ```
 
@@ -255,7 +342,8 @@ Status Code: 200
 
 
 
-## DELETE /api/v1/task/{taskId} - Delete Task By Id
+## Delete Task By Id
+### DELETE - /api/v1/task/{taskId}
 
 ### Request Parameters
 
@@ -265,10 +353,16 @@ Status Code: 200
 
 ### Request Body
 
+
+| Name                    | Type        |   Required    |
+| ----------------------- | ----------- | ------------- |
+| **userId**              | `Interger`  |       O       |
+| **password**            | `String`    |       O       |
+
 ```
   {
     userId: 123,
-    userPassword: "password123",    
+    password: "password123",    
   }
 ```
 
