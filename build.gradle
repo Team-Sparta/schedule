@@ -34,6 +34,8 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.28'
     // JDBC Template
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 tasks.named('test') {
