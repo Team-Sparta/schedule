@@ -6,6 +6,8 @@ import com.example.schedule.domain.dto.request.UserSignInRequestDto;
 import com.example.schedule.domain.dto.response.UserResponseDto;
 import com.example.schedule.domain.entity.User;
 import com.example.schedule.domain.repository.query.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository
 public class JdbcTemplateUserRepository implements UserRepository {
 
@@ -45,20 +48,24 @@ public class JdbcTemplateUserRepository implements UserRepository {
     @Override
     public UserResponseDto register(UserSignInRequestDto request) {
 
-        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
-        simpleJdbcInsert.withTableName("Users").usingGeneratedKeyColumns("id");
+        try {
+            SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
+            simpleJdbcInsert.withTableName("Users").usingGeneratedKeyColumns("id");
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("username", request.getUsername());
-        parameters.put("email", request.getEmail());
-        parameters.put("password", request.getPassword());
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("username", request.getUsername());
+            parameters.put("email", request.getEmail());
+            parameters.put("password", request.getPassword());
 
-        Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-        return new UserResponseDto(
-                key.longValue(),
-                request.getUsername(),
-                request.getEmail()
-        );
+            Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
+            return new UserResponseDto(
+                    key.longValue(),
+                    request.getUsername(),
+                    request.getEmail());
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            throw new BaseException("", ErrorCode.SQL_DB_ERROR);
+        }
     }
 }

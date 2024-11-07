@@ -63,60 +63,40 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
         }
 
-        Schedule schedule = scheduleRepository.findAllSchedulesByScheduleId(scheduleRequestDto.getUserId(), id);
+        Schedule schedule = scheduleRepository.findSchedulesByScheduleId(scheduleRequestDto.getUserId(), id);
         return new ScheduleResponseDto(schedule.getId(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory(), schedule.getCreatedAt(), schedule.getUpdatedAt());
     }
 
     @Override
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto scheduleRequestDto) {
+
+        int updatedRow = scheduleRepository.updateSchedule(id, scheduleRequestDto.getUserId(), scheduleRequestDto.getContent(), scheduleRequestDto.getCategoryId(), scheduleRequestDto.getDueDate(), scheduleRequestDto.getPriority(), scheduleRequestDto.getStatus());
+
+        if (updatedRow == 0) {
+            throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
+        }
+
+        Schedule schedule = scheduleRepository.findSchedulesByScheduleId(scheduleRequestDto.getUserId(), id);
+        return new ScheduleResponseDto(schedule.getId(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory(), schedule.getCreatedAt(), schedule.getUpdatedAt());
+    }
+
+
+    @Override
     public ScheduleListResponse findSchedules(Long userId, Long pageIndex, Integer pageSize) {
-        List<ScheduleResponseDto> scheduleResponseDtos = scheduleRepository.findSchedules(userId, pageIndex, pageSize).stream()
-                .map(schedule -> new ScheduleResponseDto(
-                        schedule.getId(),
-                        schedule.getContent(),
-                        schedule.getDueDate(),
-                        schedule.getPriority(),
-                        schedule.getStatus(),
-                        new UserResponseDto(
-                                schedule.getUser().getId(),
-                                schedule.getUser().getUsername(),
-                                schedule.getUser().getEmail()
-                        ),
-                        schedule.getCategory(),
-                        schedule.getCreatedAt(),
-                        schedule.getUpdatedAt()
-                ))
-                .collect(Collectors.toList());
+        List<ScheduleResponseDto> scheduleResponseDtos = convertEntityToDto(scheduleRepository.findSchedules(userId, pageIndex, pageSize));
+        return new ScheduleListResponse(scheduleResponseDtos);
+    }
 
+    @Override
+    public ScheduleListResponse findSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate) {
+        List<ScheduleResponseDto> scheduleResponseDtos = convertEntityToDto(scheduleRepository.findSchedulesByUpdatedDate(userId, updatedDate));
 
         return new ScheduleListResponse(scheduleResponseDtos);
     }
 
     @Override
-    public ScheduleListResponse findAllSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate) {
-        List<ScheduleResponseDto> scheduleResponseDtos = scheduleRepository.findAllSchedulesByUpdatedDate(userId, updatedDate).stream()
-                .map(schedule -> new ScheduleResponseDto(
-                        schedule.getId(),
-                        schedule.getContent(),
-                        schedule.getDueDate(),
-                        schedule.getPriority(),
-                        schedule.getStatus(),
-                        new UserResponseDto(
-                                schedule.getUser().getId(),
-                                schedule.getUser().getUsername(),
-                                schedule.getUser().getEmail()
-                        ),
-                        schedule.getCategory(),
-                        schedule.getCreatedAt(),
-                        schedule.getUpdatedAt()
-                ))
-                .collect(Collectors.toList());
-
-        return new ScheduleListResponse(scheduleResponseDtos);
-    }
-
-    @Override
-    public ScheduleResponseDto findAllSchedulesByScheduleId(Long userId, Long scheduleId) {
-        Schedule schedule = scheduleRepository.findAllSchedulesByScheduleId(userId, scheduleId);
+    public ScheduleResponseDto findSchedulesByScheduleId(Long userId, Long scheduleId) {
+        Schedule schedule = scheduleRepository.findSchedulesByScheduleId(userId, scheduleId);
         return new ScheduleResponseDto(schedule.getId(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory(), schedule.getCreatedAt(), schedule.getUpdatedAt());
     }
 
@@ -127,5 +107,25 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
         }
         return scheduleId;
+    }
+
+    private List<ScheduleResponseDto> convertEntityToDto(List<Schedule> schedules) {
+        return schedules.stream()
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule.getId(),
+                        schedule.getContent(),
+                        schedule.getDueDate(),
+                        schedule.getPriority(),
+                        schedule.getStatus(),
+                        new UserResponseDto(
+                                schedule.getUser().getId(),
+                                schedule.getUser().getUsername(),
+                                schedule.getUser().getEmail()
+                        ),
+                        schedule.getCategory(),
+                        schedule.getCreatedAt(),
+                        schedule.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 }

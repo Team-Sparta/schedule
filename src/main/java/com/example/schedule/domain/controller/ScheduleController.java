@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/api/v1/schedules")
 @AllArgsConstructor
 public class ScheduleController {
 
@@ -30,17 +30,22 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<ScheduleListResponse>> findAllSchedulesByUpdatedDate(
             @RequestParam Long userId,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime updatedDate) {
-        return CommonResponse.success(SuccessCode.SUCCESS, scheduleService.findAllSchedulesByUpdatedDate(userId, updatedDate));
+        return CommonResponse.success(SuccessCode.SUCCESS, scheduleService.findSchedulesByUpdatedDate(userId, updatedDate));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> findAllSchedulesByScheduleId(@PathVariable Long id, @RequestParam Long userId) {
-        return CommonResponse.success(SuccessCode.SUCCESS, scheduleService.findAllSchedulesByScheduleId(userId, id));
+        return CommonResponse.success(SuccessCode.SUCCESS, scheduleService.findSchedulesByScheduleId(userId, id));
     }
 
     @PostMapping("/{id}")
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> createSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto request) {
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, scheduleService.saveSchedule(id, request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CommonResponse<ScheduleResponseDto>> updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto request) {
+        return CommonResponse.success(SuccessCode.SUCCESS_INSERT, scheduleService.updateSchedule(id, request));
     }
 
     @PatchMapping("/{id}")

@@ -2,19 +2,19 @@
 ![Untitled-5](https://github.com/user-attachments/assets/e460714f-ac9b-4836-8218-0c6196373ba0)
 
 
-| Feature                         | Method  |         URL             |
-| ------------------------------- | ------- | ----------------------- |
-| **Get My Info**                 | `POST`  |   /api/v1/my-info       |
-| **Register User**               | `POST`  |   /api/v1/users         |
-| **Add Task**                    | `POST`  |   /api/v1/tasks         |
-| **Get All Task**                | `GET`   |   /api/v1/tasks         |
-| **Get Task By Id**              | `GET`   |   /api/v1/tasks/{id}    |
-| **Update Task by Id**           | `PUT`   |   /api/v1/tasks/{id}    |
-| **Update Task's Content by Id** | `PATCH` |   /api/v1/tasks/{id}    |
-| **Delete Task by Id**           | `DELETE`|   /api/v1/tasks/{id}    |
-| **Get All Categories**          | `GET`   |   /api/v1/categories    |
+| Feature                         | Method  | URL                         |
+|---------------------------------| ------- |-----------------------------|
+| **Sing In**                     | `POST`  | /api/v1/my-info             |
+| **Sign Up**                     | `POST`  | /api/v1/users               |
+| **Add Task**                    | `POST`  | /api/v1/schedules           |
+| **Get All Task**                | `GET`   | /api/v1/schedulestasks      |
+| **Get Task By Id**              | `GET`   | /api/v1/schedulestasks/{id} |
+| **Update Task by Id**           | `PUT`   | /api/v1/schedulestasks/{id} |
+| **Update Task's Content by Id** | `PATCH` | /api/v1/schedulestasks/{id} |
+| **Delete Task by Id**           | `DELETE`| /api/v1/schedulestasks/{id} |
+| **Get All Categories**          | `GET`   | /api/v1/categories          |
 
-## Get My Info
+## Sign In
 
 | Method     | URL                                   | 
 | ---------- | ------------------------------------- | 
@@ -76,7 +76,7 @@ Content-Type: application/json;charset=UTF-8
 }
 ```
 
-## Register User
+## Sign Up
 
 | Method     | URL                                  | 
 | ---------- | ------------------------------------ | 
@@ -141,9 +141,9 @@ Content-Type: application/json;charset=UTF-8
 
 ## Add Task
 
-| Method     | URL                                  | 
-| ---------- | ------------------------------------ | 
-| `POST`     | http://localhost:8080/api/v1/tasks| 
+| Method     | URL                                    | 
+| ---------- |----------------------------------------| 
+| `POST`     | http://localhost:8080/api/v1/schedules | 
 
 
 ### Request Body
@@ -198,7 +198,7 @@ Content-Type: application/json;charset=UTF-8
 
 #### Request
 ```
-curl -X POST https://localhost:8080/api/v1/tasks \
+curl -X POST https://localhost:8080/api/v1/schedules \
   -H "Content-Type: application/json" \
   -d '{
       "userId": 123,      
@@ -238,9 +238,9 @@ Content-Type: application/json;charset=UTF-8
 
 ## Get Task By ID
 
-| Method     | URL                                  | 
-| ---------- | ------------------------------------ | 
-| `GET`     | http://localhost:8080/api/v1/tasks/{taskId}| 
+| Method     | URL                                             | 
+| ---------- |-------------------------------------------------| 
+| `GET`     | http://localhost:8080/api/v1/schedules/{taskId} | 
 
 
 ### Parameters
@@ -291,7 +291,7 @@ Content-Type: application/json;charset=UTF-8
 #### Request
 
 ```
-curl -X GET https://localhost:8080/api/v1/tasks/1
+curl -X GET https://localhost:8080/api/v1/schedules/1
 ```
 
 #### Response
@@ -323,9 +323,9 @@ Content-Type: application/json;charset=UTF-8
 
 ## Get Tasks
 
-| Method     | URL                                  | 
-| ---------- | ------------------------------------ | 
-| `GET`      | http://localhost:8080/api/v1/tasks/{taskId}?userId={userId}&priority={priority}&status={status}&page={page}&lastTaskId={lastTaskId} | 
+| Method     | URL                                                                                                                                     | 
+| ---------- |-----------------------------------------------------------------------------------------------------------------------------------------| 
+| `GET`      | http://localhost:8080/api/v1/schedules/{taskId}?userId={userId}&priority={priority}&status={status}&page={page}&lastTaskId={lastTaskId} | 
 
 
 ### Query
@@ -349,10 +349,10 @@ Content-Type: application/json;charset=UTF-8
 
 #### Result
 
-| Name                    | Type        |     Description    |
-| ----------------------- | ----------- | ------------------ |
-| **isLast**              |  `Boolean`  |  True, If the list is last items in DB |
-| **tasks**               |  `Tasks`   | Tasks's List |
+| Name          | Type        |     Description    |
+|---------------| ----------- | ------------------ |
+| **isLast**    |  `Boolean`  |  True, If the list is last items in DB |
+| **schedules** |  `Tasks`   | Tasks's List |
 
 #### Tasks
 
@@ -385,7 +385,7 @@ Content-Type: application/json;charset=UTF-8
 
 #### Request
 ```
-curl -X GET https://localhost:8080/api/v1/tasks?userId=12&priority=Medium&status=Completed&page=1
+curl -X GET https://localhost:8080/api/v1/schedules?userId=12&priority=Medium&status=Completed&page=1
 ```
 
 #### Response
@@ -416,9 +416,9 @@ Content-Type: application/json;charset=UTF-8
 
 ## Update Task By Id
 
-| Method     | URL                                  | 
-| ---------- | ------------------------------------ | 
-| `PUT`      | http://localhost:8080/api/v1/tasks/{taskId}| 
+| Method     | URL                                             | 
+| ---------- |-------------------------------------------------| 
+| `PUT`      | http://localhost:8080/api/v1/schedules/{taskId} | 
 
 ### Parameters
 
@@ -478,7 +478,7 @@ Content-Type: application/json;charset=UTF-8
 
 #### Request
 ```
-curl -X PUT https://localhost:8080/api/v1/tasks/1 \
+curl -X PUT https://localhost:8080/api/v1/schedules/1 \
   -H "Content-Type: application/json" \
   -d '{
     "userId": 123,    
@@ -520,9 +520,9 @@ Content-Type: application/json;charset=UTF-8
 
 ## Update Task's Priority By Id
 
-| Method     | URL                                  | 
-| ---------- | ------------------------------------ | 
-| `PATCH`      | http://localhost:8080/api/v1/tasks/{taskId}| 
+| Method     | URL                                             | 
+| ---------- |-------------------------------------------------| 
+| `PATCH`      | http://localhost:8080/api/v1/schedules/{taskId} | 
 
 
 ### Parameters
@@ -581,7 +581,7 @@ Content-Type: application/json;charset=UTF-8
 
 #### Request
 ```
-curl -X FETCH https://localhost:8080/api/v1/tasks/1 \
+curl -X FETCH https://localhost:8080/api/v1/schedules/1 \
   -H "Content-Type: application/json" \
   -d '{
       "userId": 123,      
@@ -618,9 +618,9 @@ Content-Type: application/json;charset=UTF-8
 
 ## Delete Task By Id
 
-| Method     | URL                                  | 
-| ---------- | ------------------------------------ | 
-| `DELETE`      | http://localhost:8080/api/v1/tasks/{taskId}| 
+| Method     | URL                                             | 
+| ---------- |-------------------------------------------------| 
+| `DELETE`      | http://localhost:8080/api/v1/schedules/{taskId} | 
 
 
 ### Request Parameters
@@ -656,7 +656,7 @@ Content-Type: application/json;charset=UTF-8
 #### Request
 
 ```
-curl -X DELETE https://localhost:8080/api/v1/tasks/1 \
+curl -X DELETE https://localhost:8080/api/v1/schedules/1 \
   -H "Content-Type: application/json" \
   -d '{
     "userId": 123,    
@@ -741,18 +741,18 @@ Content-Type: application/json;charset=UTF-8
 
 ## Error Code 
 
-| HTTP Status | Message                              | Description                                                  |
-|-------------|--------------------------------------| ------------------------------------------------------------ |
-| 400         | Invalid request data                 | One or more required fields are missing or invalid           |
-| 400         | Invalid parameter                    | An invalid or missing parameter, e.g., `taskId`              |
-| 401         | Unauthorized access                  | Incorrect or missing authentication credentials              |
-| 401         | Permission denied                    | User lacks permission to modify this tasks                   |
-| 403         | Forbidden                            | User action not allowed                                      |
-| 404         | User not found                       | User with the given ID was not found                         |
-| 404         | Task not found                       | Task with the specified ID does not exist                    |
-| 404         | Category not found                   | Category with the specified ID does not exist                |
-| 409         | Duplicate entry                      | User or tasks already exists                                 |
-| 500         | Internal server error                | General server error                                         |
-| 503         | Service unavailable                  | Database or required service is currently unavailable        |
+| HTTP Status | Message                              | Description                                           |
+|-------------|--------------------------------------|-------------------------------------------------------|
+| 400         | Invalid request data                 | One or more required fields are missing or invalid    |
+| 400         | Invalid parameter                    | An invalid or missing parameter, e.g., `taskId`       |
+| 401         | Unauthorized access                  | Incorrect or missing authentication credentials       |
+| 401         | Permission denied                    | User lacks permission to modify this schedules        |
+| 403         | Forbidden                            | User action not allowed                               |
+| 404         | User not found                       | User with the given ID was not found                  |
+| 404         | Task not found                       | Task with the specified ID does not exist             |
+| 404         | Category not found                   | Category with the specified ID does not exist         |
+| 409         | Duplicate entry                      | User or schedules already exists                      |
+| 500         | Internal server error                | General server error                                  |
+| 503         | Service unavailable                  | Database or required service is currently unavailable |
 
 

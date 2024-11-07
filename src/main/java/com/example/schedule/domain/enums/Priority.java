@@ -18,21 +18,21 @@ import java.util.stream.Stream;
 public enum Priority {
     LOW("l"), MEDIUM("m"), HIGH("h");
 
-    private final String value;
+    private final String symbol;
 
     Priority(String s) {
-        this.value = s;
+        this.symbol = s;
     }
 
     private static final Map<String, Priority> PRIORITY_MAP =
             Collections.unmodifiableMap(Stream.of(values())
-                    .collect(Collectors.toMap(Priority::getValue, Function.identity())));
+                    .collect(Collectors.toMap(Priority::getSymbol, Function.identity())));
 
     @JsonCreator
-    public static Priority from(String value) {
-        Priority priority = PRIORITY_MAP.get(value.toLowerCase()); // Accept case-insensitive input
+    public static Priority from(String symbol) {
+        Priority priority = PRIORITY_MAP.get(symbol.toLowerCase()); // Accept case-insensitive input
         if (priority == null) {
-            log.error("Invalid Priority value: notify to activity monitor");
+            log.error("Invalid Priority symbol: notify to activity monitor");
             throw new BaseException(ErrorCode.INVALID_PRIORITY_TYPE);
         }
         return priority;
@@ -40,6 +40,7 @@ public enum Priority {
 
     @JsonValue
     public String getValue() {
-        return value;
+        return this.name().toUpperCase();
     }
+
 }

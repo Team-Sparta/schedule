@@ -2,8 +2,6 @@ package com.example.schedule.domain.repository.jdbc;
 
 import com.example.schedule.common.exception.BaseException;
 import com.example.schedule.common.exception.code.ErrorCode;
-import com.example.schedule.domain.dto.response.ScheduleResponseDto;
-import com.example.schedule.domain.dto.response.UserResponseDto;
 import com.example.schedule.domain.entity.Category;
 import com.example.schedule.domain.entity.Schedule;
 import com.example.schedule.domain.entity.User;
@@ -48,28 +46,16 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                     rs.getObject("updated_at", LocalDateTime.class)
             );
 
-    private static final RowMapper<ScheduleResponseDto> SCHEDULE_ROW_MAPPER_V2 = (rs, rowNum) ->
-            new ScheduleResponseDto(
-                    rs.getLong("id"),
-                    rs.getString("content"),
-                    rs.getObject("due_date", LocalDate.class),
-                    Priority.valueOf(rs.getString("priority").toUpperCase()),
-                    Status.valueOf(rs.getString("status").toUpperCase()),
-                    new UserResponseDto(rs.getLong("user_id"), rs.getString("username"), rs.getString("email")),
-                    rs.getLong("category_id") != 0 ? new Category(rs.getLong("category_id"), rs.getString("category_name")) : null,
-                    rs.getObject("created_at", LocalDateTime.class),
-                    rs.getObject("updated_at", LocalDateTime.class)
-            );
 
     // Helper method to reduce redundant query logic
-    private List<ScheduleResponseDto> findSchedulesByUserIdQuery(Long userId, String additionalWhereClause, Object... params) {
+    private List<Schedule> findSchedulesByUserIdQuery(String additionalWhereClause, Object... params) {
         String query = "SELECT S.*, U.id AS user_id, U.username, U.email, " +
                 "C.id AS category_id, C.name AS category_name " +
                 "FROM Schedules S " +
                 "INNER JOIN Users U ON S.user_id = U.id " +
                 "LEFT JOIN Categories C ON S.category_id = C.id " +
-                "WHERE S.user_id = ? " + additionalWhereClause;
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER_V2, params);
+                "WHERE user_id = ? " + additionalWhereClause;
+        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER, params);
     }
 
     @Override
@@ -87,7 +73,6 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(params));
         return new Schedule(key.longValue(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), schedule.getCategory(), new User(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()));
-//        return new ScheduleResponseDto(key.longValue(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory());
     }
 
     @Override
@@ -95,45 +80,37 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return jdbcTemplate.update("UPDATE Schedules SET content = ? WHERE id = ? AND user_id = ?", content, scheduleId, userId);
     }
 
+    @Override
+    public int updateSchedule(Long scheduleId, Long userId, String content, Long categoryId, LocalDate dueDate, Priority priority, Status status) {
+        System.out.println(priority.name());
+        return jdbcTemplate.update("UPDATE Schedules SET content = ?, category_id = ?, due_date = ?, priority = ?, status = ? WHERE id = ? AND user_id = ?",
+                content, categoryId, dueDate, priority.name(), status.name(), scheduleId, userId);
+    }
 
     @Override
     public List<Schedule> findSchedules(Long userId, Long pageIndex, Integer pageSize) {
         Long offset = (pageIndex - 1) * pageSize;
-        String query = "SELECT S.*, U.id AS user_id, U.username, U.email, " +
-                "C.id AS category_id, C.name AS category_name " +
-                "FROM Schedules S " +
-                "INNER JOIN Users U ON S.user_id = U.id " +
-                "LEFT JOIN Categories C ON S.category_id = C.id " +
-                "WHERE user_id = ? " +
-                "LIMIT ? OFFSET ?";
+        String additionalWhereClause = "LIMIT ? OFFSET ?";
 
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER, userId, pageSize, offset);
+        return findSchedulesByUserIdQuery(additionalWhereClause, userId, pageSize, offset);
     }
 
     @Override
-    public Schedule findAllSchedulesByScheduleId(Long userId, Long scheduleId) {
-        String query = "SELECT S.*, U.id AS user_id, U.username, U.email, " +
-                "C.id AS category_id, C.name AS category_name " +
-                "FROM Schedules S " +
-                "INNER JOIN Users U ON S.user_id = U.id " +
-                "LEFT JOIN Categories C ON S.category_id = C.id " +
-                "WHERE S.user_id = ? " +
-                "AND S.id = ?";
+    public Schedule findSchedulesByScheduleId(Long userId, Long scheduleId) {
 
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER, userId, scheduleId).stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
+        String additionalWhereClause = "AND S.id = ?";
+
+        return findSchedulesByUserIdQuery(additionalWhereClause, userId, scheduleId).stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
+
     }
 
     @Override
-    public List<Schedule> findAllSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate) {
-        System.out.println(updatedDate);
-        String query = "SELECT S.*, U.id AS user_id, U.username, U.email, " +
-                "C.id AS category_id, C.name AS category_name " +
-                "FROM Schedules S " +
-                "INNER JOIN Users U ON S.user_id = U.id " +
-                "LEFT JOIN Categories C ON S.category_id = C.id " +
-                "WHERE S.user_id = ? AND S.updated_at >= ?";
+    public List<Schedule> findSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate) {
 
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER, userId, updatedDate);
+        String additionalWhereClause = "AND S.updated_at >= ?";
+
+        return findSchedulesByUserIdQuery(additionalWhereClause, userId, updatedDate);
+
     }
 
     @Override

@@ -12,11 +12,13 @@ public interface ScheduleService {
 
     ScheduleResponseDto updateScheduleContent(Long scheduleId, ScheduleRequestDto scheduleRequestDto);
 
+    ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto);
+
     ScheduleListResponse findSchedules(Long userId, Long pageIndex, Integer pageSize);
 
-    ScheduleListResponse findAllSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate);
+    ScheduleListResponse findSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate);
 
-    ScheduleResponseDto findAllSchedulesByScheduleId(Long userId, Long scheduleId);
+    ScheduleResponseDto findSchedulesByScheduleId(Long userId, Long scheduleId);
 
     Long deleteSchedule(Long userId, Long scheduleId);
 }

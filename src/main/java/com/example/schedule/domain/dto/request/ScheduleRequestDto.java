@@ -19,6 +19,8 @@ public class ScheduleRequestDto {
     @NotEmpty(message = "content must not be empty")
     private String content;
 
+    private Long categoryId;
+
     private LocalDate dueDate;
 
     @Nullable
