@@ -5,6 +5,7 @@ import com.example.schedule.common.exception.code.ErrorCode;
 import com.example.schedule.domain.dto.response.ScheduleListResponse;
 import com.example.schedule.domain.dto.request.ScheduleRequestDto;
 import com.example.schedule.domain.dto.response.ScheduleResponseDto;
+import com.example.schedule.domain.dto.response.UserResponseDto;
 import com.example.schedule.domain.entity.Category;
 import com.example.schedule.domain.entity.Schedule;
 import com.example.schedule.domain.entity.User;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -37,15 +39,17 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Category category = categoryRepository.findCategoryById(id);
 
-        Schedule schedule = new Schedule(
-                scheduleRequestDto.getContent(),
-                scheduleRequestDto.getDueDate(),
-                scheduleRequestDto.getPriority(),
-                scheduleRequestDto.getStatus(),
-                user,
-                category
-        );
-        return scheduleRepository.saveSchedule(schedule);
+
+        Schedule schedule = scheduleRepository.saveSchedule(
+                new Schedule(
+                        scheduleRequestDto.getContent(),
+                        scheduleRequestDto.getDueDate(),
+                        scheduleRequestDto.getPriority(),
+                        scheduleRequestDto.getStatus(),
+                        category,
+                        user
+                ));
+        return new ScheduleResponseDto(schedule.getId(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory(), schedule.getCreatedAt(), schedule.getUpdatedAt());
 
     }
 
@@ -59,25 +63,61 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
         }
 
-        return scheduleRepository.findAllSchedulesByScheduleId(scheduleRequestDto.getUserId(), id);
-
+        Schedule schedule = scheduleRepository.findAllSchedulesByScheduleId(scheduleRequestDto.getUserId(), id);
+        return new ScheduleResponseDto(schedule.getId(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory(), schedule.getCreatedAt(), schedule.getUpdatedAt());
     }
 
     @Override
     public ScheduleListResponse findSchedules(Long userId, Long pageIndex, Integer pageSize) {
-        List<ScheduleResponseDto> schedules = scheduleRepository.findSchedules(userId, pageIndex, pageSize);
-        return new ScheduleListResponse(schedules);
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleRepository.findSchedules(userId, pageIndex, pageSize).stream()
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule.getId(),
+                        schedule.getContent(),
+                        schedule.getDueDate(),
+                        schedule.getPriority(),
+                        schedule.getStatus(),
+                        new UserResponseDto(
+                                schedule.getUser().getId(),
+                                schedule.getUser().getUsername(),
+                                schedule.getUser().getEmail()
+                        ),
+                        schedule.getCategory(),
+                        schedule.getCreatedAt(),
+                        schedule.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
+
+
+        return new ScheduleListResponse(scheduleResponseDtos);
     }
 
     @Override
     public ScheduleListResponse findAllSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate) {
-        List<ScheduleResponseDto> allSchedulesByUpdatedDate = scheduleRepository.findAllSchedulesByUpdatedDate(userId, updatedDate);
-        return new ScheduleListResponse(allSchedulesByUpdatedDate);
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleRepository.findAllSchedulesByUpdatedDate(userId, updatedDate).stream()
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule.getId(),
+                        schedule.getContent(),
+                        schedule.getDueDate(),
+                        schedule.getPriority(),
+                        schedule.getStatus(),
+                        new UserResponseDto(
+                                schedule.getUser().getId(),
+                                schedule.getUser().getUsername(),
+                                schedule.getUser().getEmail()
+                        ),
+                        schedule.getCategory(),
+                        schedule.getCreatedAt(),
+                        schedule.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
+
+        return new ScheduleListResponse(scheduleResponseDtos);
     }
 
     @Override
     public ScheduleResponseDto findAllSchedulesByScheduleId(Long userId, Long scheduleId) {
-        return scheduleRepository.findAllSchedulesByScheduleId(userId, scheduleId);
+        Schedule schedule = scheduleRepository.findAllSchedulesByScheduleId(userId, scheduleId);
+        return new ScheduleResponseDto(schedule.getId(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory(), schedule.getCreatedAt(), schedule.getUpdatedAt());
     }
 
     @Override

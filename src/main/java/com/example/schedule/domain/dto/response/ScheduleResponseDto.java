@@ -5,6 +5,7 @@ import com.example.schedule.domain.enums.Priority;
 import com.example.schedule.domain.enums.Status;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public record ScheduleResponseDto(
@@ -14,7 +15,9 @@ public record ScheduleResponseDto(
         Priority priority,
         Status status,
         UserResponseDto user,
-        Category category
+        Category category,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 
 }

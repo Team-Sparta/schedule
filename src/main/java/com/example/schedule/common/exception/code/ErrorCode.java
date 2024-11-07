@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "Validation failed"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "An internal server error has occurred."),
+    SQL_DB_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "An internal server error has occurred."),
 
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "User not found."),
     NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "Schedule not found."),

@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,6 @@ public class JdbcTemplateUserRepository implements UserRepository {
                     rs.getObject("updated_at", LocalDateTime.class)
             );
 
-
     @Override
     public User findByUserid(Long userid) {
         List<User> query = jdbcTemplate.query("SELECT * FROM Users WHERE id = ?", USER_ROW_MAPPER, userid);
@@ -44,6 +44,7 @@ public class JdbcTemplateUserRepository implements UserRepository {
 
     @Override
     public UserResponseDto register(UserSignInRequestDto request) {
+
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
         simpleJdbcInsert.withTableName("Users").usingGeneratedKeyColumns("id");
 

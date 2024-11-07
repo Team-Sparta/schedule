@@ -38,12 +38,12 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
             new Schedule(
                     rs.getLong("id"),
                     rs.getString("content"),
-                    new User(rs.getLong("user_id"), rs.getString("username"), rs.getString("email"), rs.getObject("created_at", LocalDateTime.class),
-                            rs.getObject("updated_at", LocalDateTime.class)),
-                    rs.getLong("category_id") != 0 ? new Category(rs.getLong("category_id"), rs.getString("category_name")) : null,
                     rs.getObject("due_date", LocalDate.class),
                     Priority.valueOf(rs.getString("priority").toUpperCase()),
                     Status.valueOf(rs.getString("status").toUpperCase()),
+                    rs.getLong("category_id") != 0 ? new Category(rs.getLong("category_id"), rs.getString("category_name")) : null,
+                    new User(rs.getLong("user_id"), rs.getString("username"), rs.getString("email"), rs.getObject("created_at", LocalDateTime.class),
+                            rs.getObject("updated_at", LocalDateTime.class)),
                     rs.getObject("created_at", LocalDateTime.class),
                     rs.getObject("updated_at", LocalDateTime.class)
             );
@@ -56,7 +56,9 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                     Priority.valueOf(rs.getString("priority").toUpperCase()),
                     Status.valueOf(rs.getString("status").toUpperCase()),
                     new UserResponseDto(rs.getLong("user_id"), rs.getString("username"), rs.getString("email")),
-                    rs.getLong("category_id") != 0 ? new Category(rs.getLong("category_id"), rs.getString("category_name")) : null
+                    rs.getLong("category_id") != 0 ? new Category(rs.getLong("category_id"), rs.getString("category_name")) : null,
+                    rs.getObject("created_at", LocalDateTime.class),
+                    rs.getObject("updated_at", LocalDateTime.class)
             );
 
     // Helper method to reduce redundant query logic
@@ -71,7 +73,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     }
 
     @Override
-    public ScheduleResponseDto saveSchedule(Schedule schedule) {
+    public Schedule saveSchedule(Schedule schedule) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
         simpleJdbcInsert.withTableName("Schedules").usingGeneratedKeyColumns("id");
 
@@ -84,8 +86,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         params.put("status", schedule.getStatus());
 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(params));
-
-        return new ScheduleResponseDto(key.longValue(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory());
+        return new Schedule(key.longValue(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), schedule.getCategory(), new User(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()));
+//        return new ScheduleResponseDto(key.longValue(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory());
     }
 
     @Override
@@ -95,7 +97,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
 
     @Override
-    public List<ScheduleResponseDto> findSchedules(Long userId, Long pageIndex, Integer pageSize) {
+    public List<Schedule> findSchedules(Long userId, Long pageIndex, Integer pageSize) {
         Long offset = (pageIndex - 1) * pageSize;
         String query = "SELECT S.*, U.id AS user_id, U.username, U.email, " +
                 "C.id AS category_id, C.name AS category_name " +
@@ -105,11 +107,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                 "WHERE user_id = ? " +
                 "LIMIT ? OFFSET ?";
 
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER_V2, userId, pageSize, offset);
+        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER, userId, pageSize, offset);
     }
 
     @Override
-    public ScheduleResponseDto findAllSchedulesByScheduleId(Long userId, Long scheduleId) {
+    public Schedule findAllSchedulesByScheduleId(Long userId, Long scheduleId) {
         String query = "SELECT S.*, U.id AS user_id, U.username, U.email, " +
                 "C.id AS category_id, C.name AS category_name " +
                 "FROM Schedules S " +
@@ -118,11 +120,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                 "WHERE S.user_id = ? " +
                 "AND S.id = ?";
 
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER_V2, userId, scheduleId).stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
+        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER, userId, scheduleId).stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate) {
+    public List<Schedule> findAllSchedulesByUpdatedDate(Long userId, LocalDateTime updatedDate) {
         System.out.println(updatedDate);
         String query = "SELECT S.*, U.id AS user_id, U.username, U.email, " +
                 "C.id AS category_id, C.name AS category_name " +
@@ -131,7 +133,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                 "LEFT JOIN Categories C ON S.category_id = C.id " +
                 "WHERE S.user_id = ? AND S.updated_at >= ?";
 
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER_V2, userId, updatedDate);
+        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER, userId, updatedDate);
     }
 
     @Override
