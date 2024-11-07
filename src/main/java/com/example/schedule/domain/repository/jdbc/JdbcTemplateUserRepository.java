@@ -31,17 +31,18 @@ public class JdbcTemplateUserRepository implements UserRepository {
     }
 
     private static final RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
-            new User(
-                    rs.getLong("id"),
-                    rs.getString("username"),
-                    rs.getString("email"),
-                    rs.getObject("created_at", LocalDateTime.class),
-                    rs.getObject("updated_at", LocalDateTime.class)
-            );
+            User.builder()
+                    .id(rs.getLong("id"))
+                    .username(rs.getString("username"))
+                    .email(rs.getString("email"))
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+
 
     @Override
     public User findByUserid(Long userid) {
-        List<User> query = jdbcTemplate.query("SELECT * FROM Users WHERE id = ?", USER_ROW_MAPPER, userid);
+        List<User> query = jdbcTemplate.query("SELECT id, username, email, created_at, updated_at FROM users WHERE id = ?", USER_ROW_MAPPER, userid);
         return query.stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
     }
 
@@ -50,7 +51,7 @@ public class JdbcTemplateUserRepository implements UserRepository {
 
         try {
             SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
-            simpleJdbcInsert.withTableName("Users").usingGeneratedKeyColumns("id");
+            simpleJdbcInsert.withTableName("users").usingGeneratedKeyColumns("id");
 
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("username", request.getUsername());

@@ -1,15 +1,14 @@
 package com.example.schedule.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "Categories")
+@Table(name = "categories")
 public class Category {
 
     @Id
@@ -18,4 +17,5 @@ public class Category {
 
     @Column(nullable = false, unique = true, length = 50)
     private String name;
+
 }

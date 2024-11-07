@@ -33,35 +33,37 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     // General RowMapper to avoid repetition
     private static final RowMapper<Schedule> SCHEDULE_ROW_MAPPER = (rs, rowNum) ->
-            new Schedule(
-                    rs.getLong("id"),
-                    rs.getString("content"),
-                    rs.getObject("due_date", LocalDate.class),
-                    Priority.valueOf(rs.getString("priority").toUpperCase()),
-                    Status.valueOf(rs.getString("status").toUpperCase()),
-                    rs.getLong("category_id") != 0 ? new Category(rs.getLong("category_id"), rs.getString("category_name")) : null,
-                    new User(rs.getLong("user_id"), rs.getString("username"), rs.getString("email"), rs.getObject("created_at", LocalDateTime.class),
-                            rs.getObject("updated_at", LocalDateTime.class)),
-                    rs.getObject("created_at", LocalDateTime.class),
-                    rs.getObject("updated_at", LocalDateTime.class)
-            );
+            Schedule.builder()
+                    .id(rs.getLong("id"))
+                    .content(rs.getString("content"))
+                    .dueDate(rs.getObject("due_date", LocalDate.class))
+                    .priority(Priority.valueOf(rs.getString("priority").toUpperCase()))
+                    .status(Status.valueOf(rs.getString("status").toUpperCase()))
+                    .category(rs.getLong("category_id") != 0 ? new Category(rs.getLong("category_id"), rs.getString("category_name")) : null)
+                    .user(User.builder().id(rs.getLong("user_id")).username(rs.getString("username")).email("email").build())
+                    .createdAt(rs.getObject("created_at", LocalDateTime.class))
+                    .updatedAt(rs.getObject("updated_at", LocalDateTime.class))
+                    .build();
 
 
-    // Helper method to reduce redundant query logic
+    private static final String BASE_SCHEDULE_QUERY =
+            "SELECT S.id, S.content, S.due_date, S.priority, S.status, " +
+                    "S.category_id, S.user_id, S.created_at, S.updated_at, " +
+                    "U.username, U.email, " +
+                    "C.name AS category_name " +
+                    "FROM schedules S " +
+                    "INNER JOIN Users U ON S.user_id = U.id " +
+                    "LEFT JOIN Categories C ON S.category_id = C.id " +
+                    "WHERE S.user_id = ? ";
+
     private List<Schedule> findSchedulesByUserIdQuery(String additionalWhereClause, Object... params) {
-        String query = "SELECT S.*, U.id AS user_id, U.username, U.email, " +
-                "C.id AS category_id, C.name AS category_name " +
-                "FROM Schedules S " +
-                "INNER JOIN Users U ON S.user_id = U.id " +
-                "LEFT JOIN Categories C ON S.category_id = C.id " +
-                "WHERE user_id = ? " + additionalWhereClause;
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER, params);
+        return jdbcTemplate.query(BASE_SCHEDULE_QUERY + additionalWhereClause, SCHEDULE_ROW_MAPPER, params);
     }
 
     @Override
     public Schedule saveSchedule(Schedule schedule) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
-        simpleJdbcInsert.withTableName("Schedules").usingGeneratedKeyColumns("id");
+        simpleJdbcInsert.withTableName("schedules").usingGeneratedKeyColumns("id");
 
         Map<String, Object> params = new HashMap<>();
         params.put("content", schedule.getContent());
@@ -72,18 +74,28 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         params.put("status", schedule.getStatus());
 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(params));
-        return new Schedule(key.longValue(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), schedule.getCategory(), new User(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()));
+        return Schedule.builder()
+                .id(key.longValue())
+                .content(schedule.getContent())
+                .dueDate(schedule.getDueDate())
+                .priority(schedule.getPriority())
+                .status(schedule.getStatus())
+                .category(schedule.getCategory())
+                .user(schedule.getUser())
+                .createdAt(schedule.getCreatedAt())
+                .updatedAt(schedule.getUpdatedAt())
+                .build();
     }
 
     @Override
     public int updateScheduleContent(Long scheduleId, Long userId, String content) {
-        return jdbcTemplate.update("UPDATE Schedules SET content = ? WHERE id = ? AND user_id = ?", content, scheduleId, userId);
+        return jdbcTemplate.update("UPDATE schedules SET content = ? WHERE id = ? AND user_id = ?", content, scheduleId, userId);
     }
 
     @Override
     public int updateSchedule(Long scheduleId, Long userId, String content, Long categoryId, LocalDate dueDate, Priority priority, Status status) {
         System.out.println(priority.name());
-        return jdbcTemplate.update("UPDATE Schedules SET content = ?, category_id = ?, due_date = ?, priority = ?, status = ? WHERE id = ? AND user_id = ?",
+        return jdbcTemplate.update("UPDATE schedules SET content = ?, category_id = ?, due_date = ?, priority = ?, status = ? WHERE id = ? AND user_id = ?",
                 content, categoryId, dueDate, priority.name(), status.name(), scheduleId, userId);
     }
 
@@ -100,7 +112,10 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
         String additionalWhereClause = "AND S.id = ?";
 
-        return findSchedulesByUserIdQuery(additionalWhereClause, userId, scheduleId).stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
+
+        Schedule schedule = findSchedulesByUserIdQuery(additionalWhereClause, userId, scheduleId).stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
+        System.out.println("test2");
+        return schedule;
 
     }
 
@@ -115,7 +130,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     @Override
     public int deleteSchedule(Long userId, Long scheduleId) {
-        return jdbcTemplate.update("DELETE FROM Schedules WHERE id = ? AND user_id = ?", scheduleId, userId);
+        return jdbcTemplate.update("DELETE FROM schedules WHERE id = ? AND user_id = ?", scheduleId, userId);
     }
 }
 

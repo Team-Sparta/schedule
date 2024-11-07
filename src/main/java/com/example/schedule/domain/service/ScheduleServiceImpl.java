@@ -41,14 +41,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
         Schedule schedule = scheduleRepository.saveSchedule(
-                new Schedule(
-                        scheduleRequestDto.getContent(),
-                        scheduleRequestDto.getDueDate(),
-                        scheduleRequestDto.getPriority(),
-                        scheduleRequestDto.getStatus(),
-                        category,
-                        user
-                ));
+                Schedule.builder()
+                        .content(scheduleRequestDto.getContent())
+                        .dueDate(scheduleRequestDto.getDueDate())
+                        .priority(scheduleRequestDto.getPriority())
+                        .status(scheduleRequestDto.getStatus())
+                        .category(category)
+                        .user(user).build());
+
         return new ScheduleResponseDto(schedule.getId(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory(), schedule.getCreatedAt(), schedule.getUpdatedAt());
 
     }

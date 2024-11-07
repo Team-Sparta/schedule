@@ -30,7 +30,7 @@ public enum Priority {
 
     @JsonCreator
     public static Priority from(String symbol) {
-        Priority priority = PRIORITY_MAP.get(symbol.toLowerCase()); // Accept case-insensitive input
+        Priority priority = PRIORITY_MAP.get(symbol); // Accept case-insensitive input
         if (priority == null) {
             log.error("Invalid Priority symbol: notify to activity monitor");
             throw new BaseException(ErrorCode.INVALID_PRIORITY_TYPE);
@@ -40,7 +40,7 @@ public enum Priority {
 
     @JsonValue
     public String getValue() {
-        return this.name().toUpperCase();
+        return this.name();
     }
 
 }

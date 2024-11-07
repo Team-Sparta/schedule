@@ -10,9 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "Schedules")
 public class Schedule extends BaseTimeEntity {
 
@@ -43,7 +42,13 @@ public class Schedule extends BaseTimeEntity {
     User user;
 
 
-    public Schedule(Long id, String content, LocalDate dueDate, Priority priority, Status status, Category category, User user, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    @Builder
+    public Schedule(Long id, @NonNull String content,
+                    @NonNull LocalDate dueDate,
+                    @NonNull Priority priority,
+                    @NonNull Status status,
+                    @NonNull Category category,
+                    @NonNull User user, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.content = content;
         this.dueDate = dueDate;
@@ -54,14 +59,4 @@ public class Schedule extends BaseTimeEntity {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
-    public Schedule(String content, LocalDate dueDate, Priority priority, Status status, Category category, User user) {
-        this.content = content;
-        this.dueDate = dueDate;
-        this.priority = priority;
-        this.status = status;
-        this.category = category;
-        this.user = user;
-    }
-
 }
