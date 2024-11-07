@@ -1,14 +1,18 @@
-package com.example.schedule.entity;
+package com.example.schedule.domain.entity;
 
-import com.example.schedule.enums.Priority;
-import com.example.schedule.enums.Status;
+import com.example.schedule.domain.enums.Priority;
+import com.example.schedule.domain.enums.Status;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "Schedules")
 public class Schedule {
@@ -43,5 +47,15 @@ public class Schedule {
 
     @Column(name = "updated_at")
     LocalDateTime updatedAt;
+
+    public Schedule(String content, LocalDate dueDate, Priority priority, Status status, User user, Category category) {
+        this.content = content;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.status = status;
+        this.user = user;
+        this.category = category;
+    }
+
 
 }

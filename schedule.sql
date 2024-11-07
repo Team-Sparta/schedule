@@ -1,22 +1,23 @@
 use schedule;
 
-CREATE TABLE Users
+
+CREATE TABLE if not exists  Users
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
     username   varchar(255) NOT NULL UNIQUE,
     email      varchar(255) NOT NULL UNIQUE,
     password   varchar(255) NOT NULL,
-    created_at timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at timestamp     DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Categories
+CREATE TABLE if not exists  Categories
 (
     id   BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
-CREATE TABLE Schedules
+CREATE TABLE if not exists  Schedules
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
     content     text         NOT NULL COMMENT 'Content of the post',
@@ -41,7 +42,7 @@ VALUES ('Work');
 
 # Insert a new to-do list
 INSERT INTO Schedules (content, user_id, category_id, due_date, status, priority)
-VALUES ('content', 1, 1,  '2024-11-05', 'Pending', 'High');
+VALUES ('content2', 1, 1,  '2024-11-05', 'Pending', 'High');
 
 # Select all to-do lists for a specific user
 SELECT *

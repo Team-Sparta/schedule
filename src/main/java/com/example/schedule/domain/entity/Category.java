@@ -1,9 +1,13 @@
-package com.example.schedule.entity;
+package com.example.schedule.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "Categories")
 public class Category {
@@ -14,6 +18,4 @@ public class Category {
 
     @Column(nullable = false, unique = true, length = 50)
     private String name;
-
-    // Getters and Setters
 }
