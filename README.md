@@ -2,17 +2,17 @@
 ![Untitled-5](https://github.com/user-attachments/assets/e460714f-ac9b-4836-8218-0c6196373ba0)
 
 
-| Feature                         | Method  | URL                         |
-|---------------------------------| ------- |-----------------------------|
-| **Sing In**                     | `POST`  | /api/v1/my-info             |
-| **Sign Up**                     | `POST`  | /api/v1/users               |
-| **Add Task**                    | `POST`  | /api/v1/schedules           |
-| **Get All Task**                | `GET`   | /api/v1/schedulestasks      |
-| **Get Task By Id**              | `GET`   | /api/v1/schedulestasks/{id} |
-| **Update Task by Id**           | `PUT`   | /api/v1/schedulestasks/{id} |
-| **Update Task's Content by Id** | `PATCH` | /api/v1/schedulestasks/{id} |
-| **Delete Task by Id**           | `DELETE`| /api/v1/schedulestasks/{id} |
-| **Get All Categories**          | `GET`   | /api/v1/categories          |
+| Feature                             | Method  | URL                    |
+|-------------------------------------| ------- |------------------------|
+| **Sing In**                         | `POST`  | /api/v1/my-info        |
+| **Sign Up**                         | `POST`  | /api/v1/users          |
+| **Add Schedule**                    | `POST`  | /api/v1/schedules      |
+| **Get All Schedules**               | `GET`   | /api/v1/schedules     |
+| **Get Schedule By Id**              | `GET`   | /api/v1/schedules/{id} |
+| **Update Schedule by Id**           | `PUT`   | /api/v1/schedules/{id} |
+| **Update Schedule's Content by Id** | `PATCH` | /api/v1/schedules/{id} |
+| **Delete Schedule by Id**           | `DELETE`| /api/v1/schedules/{id} |
+| **Get All Categories**              | `GET`   | /api/v1/categories     |
 
 ## Sign In
 
@@ -139,7 +139,7 @@ Content-Type: application/json;charset=UTF-8
 }
 ```
 
-## Add Task
+## Add Schedule
 
 | Method     | URL                                    | 
 | ---------- |----------------------------------------| 
@@ -170,15 +170,15 @@ Content-Type: application/json;charset=UTF-8
 
 #### Result
 
-| Name                    | Type        |   Description |
-| ----------------------- | ----------- | ------------- |
-| **taskId**              |  `Integer`  |  Task's id    |
-| **content**             |  `String`   |  Task's Content  |
-| **dueDate**             |  `String`   |  Task's Deadline Date |
-| **priority**            |  `String`   |  Taks's Priority ["Low", "Medium", "High"] |
-| **status**              |  `String`   |  Task's Status ["Pending", "Progress", "Completed"] |
-| **categoryInfo**        |  CategoryInfo  |  Taks's Category |
-| **userInfo**            |  UserInfo   |  User's Information |
+| Name             | Type        | Description                                            |
+|------------------| ----------- |--------------------------------------------------------|
+| **scheduleId**   |  `Integer`  | Schedule's id                                          |
+| **content**      |  `String`   | Schedule's Content                                 |
+| **dueDate**      |  `String`   | Schedule's Deadline Date                           |
+| **priority**     |  `String`   | Taks's Priority ["Low", "Medium", "High"]              |
+| **status**       |  `String`   | Schedule's Status ["Pending", "Progress", "Completed"] |
+| **categoryInfo** |  CategoryInfo  | Taks's Category                                        |
+| **userInfo**     |  UserInfo   | User's Information                                     |
 
 #### CategoryInfo
 
@@ -236,18 +236,18 @@ Content-Type: application/json;charset=UTF-8
 }
 ```
 
-## Get Task By ID
+## Get Schedule By ID
 
-| Method     | URL                                             | 
-| ---------- |-------------------------------------------------| 
-| `GET`     | http://localhost:8080/api/v1/schedules/{taskId} | 
+| Method     | URL                                                 | 
+| ---------- |-----------------------------------------------------| 
+| `GET`     | http://localhost:8080/api/v1/schedules/{scheduleId} | 
 
 
 ### Parameters
 
-| Name                    | Type        |
-| ----------------------- | ----------- |
-| **taskId**              | `Interger`  |
+| Name           | Type        |
+|----------------| ----------- |
+| **scheduleId** | `Interger`  |
 
 ### Response Body
 
@@ -261,15 +261,15 @@ Content-Type: application/json;charset=UTF-8
 
 #### Result
 
-| Name                    | Type          |  Description  |
-| ----------------------- | ------------- | ------------- |
-| **taskId**              |  `Integer`    |  Task's id    |
-| **content**             |  `String`     |  Task's Content  |
-| **dueDate**             |  `String`     |  Task's Deadline Date |
-| **priority**            |  `String`     |  Taks's Priority ["Low", "Medium", "High"] |
-| **status**              |  `String`     |  Task's Status ["Pending", "Progress", "Completed"] |
-| **categoryInfo**        |  CategoryInfo |  Taks's Category |
-| **userInfo**            |  UserInfo     |  User's Information |
+| Name             | Type          | Description                                            |
+|------------------| ------------- |--------------------------------------------------------|
+| **scheduleId**   |  `Integer`    | Schedule's id                                          |
+| **content**      |  `String`     | Schedule's Content                                 |
+| **dueDate**      |  `String`     | Schedule's Deadline Date                           |
+| **priority**     |  `String`     | Taks's Priority ["Low", "Medium", "High"]              |
+| **status**       |  `String`     | Schedule's Status ["Pending", "Progress", "Completed"] |
+| **categoryInfo** |  CategoryInfo | Taks's Category                                        |
+| **userInfo**     |  UserInfo     | User's Information                                     |
 
 #### CategoryInfo
 
@@ -321,11 +321,11 @@ Content-Type: application/json;charset=UTF-8
 }
 ```
 
-## Get Tasks
+## Get Schedules
 
-| Method     | URL                                                                                                                                     | 
-| ---------- |-----------------------------------------------------------------------------------------------------------------------------------------| 
-| `GET`      | http://localhost:8080/api/v1/schedules/{taskId}?userId={userId}&priority={priority}&status={status}&page={page}&lastTaskId={lastTaskId} | 
+| Method     | URL                                                                                                                                                 | 
+| ---------- |-----------------------------------------------------------------------------------------------------------------------------------------------------| 
+| `GET`      | http://localhost:8080/api/v1/schedules/{scheduleId}?userId={userId}&priority={priority}&status={status}&page={page}&lastScheduleId={lastScheduleId} | 
 
 
 ### Query
@@ -349,22 +349,22 @@ Content-Type: application/json;charset=UTF-8
 
 #### Result
 
-| Name          | Type        |     Description    |
-|---------------| ----------- | ------------------ |
-| **isLast**    |  `Boolean`  |  True, If the list is last items in DB |
-| **schedules** |  `Tasks`   | Tasks's List |
+| Name          | Type        | Description                           |
+|---------------|-------------|---------------------------------------|
+| **isLast**    | `Boolean`   | True, If the list is last items in DB |
+| **schedules** | `Schedules` | Schedules's List                      |
 
-#### Tasks
+#### Schedules
 
-| Name                    | Type        |   Description |
-| ----------------------- | ----------- | ------------- |
-| **taskId**              |  `Integer`  |  Task's id    |
-| **content**             |  `String`   |  Task's Content  |
-| **dueDate**             |  `String`   |  Task's Deadline Date |
-| **priority**            |  `String`   |  Taks's Priority ["Low", "Medium", "High"] |
-| **status**              |  `String`   |  Task's Status ["Pending", "Progress", "Completed"] |
-| **categoryInfo**        |  CategoryInfo  |  Taks's Category |
-| **userInfo**            |  UserInfo   |  User's Information |
+| Name             | Type        | Description                                            |
+|------------------| ----------- |--------------------------------------------------------|
+| **scheduleId**   |  `Integer`  | Schedule's id                                          |
+| **content**      |  `String`   | Schedule's Content                                 |
+| **dueDate**      |  `String`   | Schedule's Deadline Date                           |
+| **priority**     |  `String`   | Taks's Priority ["Low", "Medium", "High"]              |
+| **status**       |  `String`   | Schedule's Status ["Pending", "Progress", "Completed"] |
+| **categoryInfo** |  CategoryInfo  | Taks's Category                                        |
+| **userInfo**     |  UserInfo   | User's Information                                     |
 
 #### CategoryInfo
 
@@ -414,17 +414,17 @@ Content-Type: application/json;charset=UTF-8
 }
 ```
 
-## Update Task By Id
+## Update Schedule By Id
 
-| Method     | URL                                             | 
-| ---------- |-------------------------------------------------| 
-| `PUT`      | http://localhost:8080/api/v1/schedules/{taskId} | 
+| Method     | URL                                                 | 
+| ---------- |-----------------------------------------------------| 
+| `PUT`      | http://localhost:8080/api/v1/schedules/{scheduleId} | 
 
 ### Parameters
 
-| Name                    | Type        |
-| ----------------------- | ----------- |
-| **taskId**              | `Interger`  |
+| Name           | Type        |
+|----------------| ----------- |
+| **scheduleId** | `Interger`  |
 
 ### Request Body
 
@@ -450,15 +450,15 @@ Content-Type: application/json;charset=UTF-8
 
 #### Result
 
-| Name                    | Type        |   Description |
-| ----------------------- | ----------- | ------------- |
-| **taskId**              |  `Integer`  |  Task's id    |
-| **content**             |  `String`   |  Task's Content  |
-| **dueDate**             |  `String`   |  Task's Deadline Date |
-| **priority**            |  `String`   |  Taks's Priority ["Low", "Medium", "High"] |
-| **status**              |  `String`   |  Task's Status ["Pending", "Progress", "Completed"] |
-| **categoryInfo**        |  CategoryInfo  |  Taks's Category |
-| **userInfo**            |  UserInfo   |  User's Information |
+| Name             | Type        | Description                                            |
+|------------------| ----------- |--------------------------------------------------------|
+| **scheduleId**   |  `Integer`  | Schedule's id                                          |
+| **content**      |  `String`   | Schedule's Content                                 |
+| **dueDate**      |  `String`   | Schedule's Deadline Date                           |
+| **priority**     |  `String`   | Taks's Priority ["Low", "Medium", "High"]              |
+| **status**       |  `String`   | Schedule's Status ["Pending", "Progress", "Completed"] |
+| **categoryInfo** |  CategoryInfo  | Taks's Category                                        |
+| **userInfo**     |  UserInfo   | User's Information                                     |
 
 #### CategoryInfo
 
@@ -518,18 +518,18 @@ Content-Type: application/json;charset=UTF-8
 }
 ```
 
-## Update Task's Priority By Id
+## Update Schedule's Priority By Id
 
-| Method     | URL                                             | 
-| ---------- |-------------------------------------------------| 
-| `PATCH`      | http://localhost:8080/api/v1/schedules/{taskId} | 
+| Method     | URL                                                 | 
+| ---------- |-----------------------------------------------------| 
+| `PATCH`      | http://localhost:8080/api/v1/schedules/{scheduleId} | 
 
 
 ### Parameters
 
-| Name                    | Type        |
-| ----------------------- | ----------- |
-| **taskId**              | `Interger`  |
+| Name           | Type        |
+|----------------| ----------- |
+| **scheduleId** | `Interger`  |
 
 
 ### Request Body
@@ -552,15 +552,15 @@ Content-Type: application/json;charset=UTF-8
 
 #### Result
 
-| Name                    | Type        |   Description |
-| ----------------------- | ----------- | ------------- |
-| **taskId**              |  `Integer`  |  Task's id    |
-| **content**             |  `String`   |  Task's Content  |
-| **dueDate**             |  `String`   |  Task's Deadline Date |
-| **priority**            |  `String`   |  Taks's Priority ["Low", "Medium", "High"] |
-| **status**              |  `String`   |  Task's Status ["Pending", "Progress", "Completed"] |
-| **categoryInfo**        |  CategoryInfo  |  Taks's Category |
-| **userInfo**            |  UserInfo   |  User's Information |
+| Name             | Type        | Description                                            |
+|------------------| ----------- |--------------------------------------------------------|
+| **scheduleId**   |  `Integer`  | Schedule's id                                          |
+| **content**      |  `String`   | Schedule's Content                                 |
+| **dueDate**      |  `String`   | Schedule's Deadline Date                           |
+| **priority**     |  `String`   | Taks's Priority ["Low", "Medium", "High"]              |
+| **status**       |  `String`   | Schedule's Status ["Pending", "Progress", "Completed"] |
+| **categoryInfo** |  CategoryInfo  | Taks's Category                                        |
+| **userInfo**     |  UserInfo   | User's Information                                     |
 
 #### CategoryInfo
 
@@ -616,18 +616,18 @@ Content-Type: application/json;charset=UTF-8
 ```
 
 
-## Delete Task By Id
+## Delete Schedule By Id
 
-| Method     | URL                                             | 
-| ---------- |-------------------------------------------------| 
-| `DELETE`      | http://localhost:8080/api/v1/schedules/{taskId} | 
+| Method     | URL                                                 | 
+| ---------- |-----------------------------------------------------| 
+| `DELETE`      | http://localhost:8080/api/v1/schedules/{scheduleId} | 
 
 
 ### Request Parameters
 
-| Name                    | Type        |
-| ----------------------- | ----------- |
-| **taskId**              | `Interger`  |
+| Name           | Type        |
+|----------------| ----------- |
+| **scheduleId** | `Interger`  |
 
 ### Request Body
 
@@ -648,9 +648,9 @@ Content-Type: application/json;charset=UTF-8
 
 #### Result
 
-| Name                    | Type        |   Description |
-| ----------------------- | ----------- | ------------- |
-| **taskId**              |  `Integer`  |  Task's id    |
+| Name           | Type        | Description   |
+|----------------| ----------- |---------------|
+| **scheduleId** |  `Integer`  | Schedule's id |
 
 ### Example
 #### Request
@@ -672,7 +672,7 @@ Content-Type: application/json;charset=UTF-8
   "success": true,
   "message": "Response Message",
   "result": {
-    "taskId": 0
+    "scheduleId": 0
   }
 }
 ```
@@ -741,18 +741,18 @@ Content-Type: application/json;charset=UTF-8
 
 ## Error Code 
 
-| HTTP Status | Message                              | Description                                           |
-|-------------|--------------------------------------|-------------------------------------------------------|
-| 400         | Invalid request data                 | One or more required fields are missing or invalid    |
-| 400         | Invalid parameter                    | An invalid or missing parameter, e.g., `taskId`       |
-| 401         | Unauthorized access                  | Incorrect or missing authentication credentials       |
-| 401         | Permission denied                    | User lacks permission to modify this schedules        |
-| 403         | Forbidden                            | User action not allowed                               |
-| 404         | User not found                       | User with the given ID was not found                  |
-| 404         | Task not found                       | Task with the specified ID does not exist             |
-| 404         | Category not found                   | Category with the specified ID does not exist         |
-| 409         | Duplicate entry                      | User or schedules already exists                      |
-| 500         | Internal server error                | General server error                                  |
-| 503         | Service unavailable                  | Database or required service is currently unavailable |
+| HTTP Status | Message               | Description                                           |
+|-------------|-----------------------|-------------------------------------------------------|
+| 400         | Invalid request data  | One or more required fields are missing or invalid    |
+| 400         | Invalid parameter     | An invalid or missing parameter, e.g., `scheduleId`   |
+| 401         | Unauthorized access   | Incorrect or missing authentication credentials       |
+| 401         | Permission denied     | User lacks permission to modify this schedules        |
+| 403         | Forbidden             | User action not allowed                               |
+| 404         | User not found        | User with the given ID was not found                  |
+| 404         | Schedule not found    | Schedule with the specified ID does not exist         |
+| 404         | Category not found    | Category with the specified ID does not exist         |
+| 409         | Duplicate entry       | User or schedules already exists                      |
+| 500         | Internal server error | General server error                                  |
+| 503         | Service unavailable   | Database or required service is currently unavailable |
 
 
