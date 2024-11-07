@@ -1,5 +1,6 @@
 # todo-list
-![Untitled-5](https://github.com/user-attachments/assets/e460714f-ac9b-4836-8218-0c6196373ba0)
+<img width="804" alt="Screenshot 2024-11-07 at 15 53 00" src="https://github.com/user-attachments/assets/4471c5ec-f414-498b-b049-7ed254a3b832">
+
 
 
 | Feature                             | Method  | URL                    |
