@@ -15,8 +15,12 @@ public enum ErrorCode {
     NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "Schedule not found."),
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "Category not found."),
 
-    INVALID_PRIORITY_TYPE(HttpStatus.BAD_REQUEST, "Invalid Priority Value");
+    INVALID_PRIORITY_TYPE(HttpStatus.BAD_REQUEST, "Invalid Priority Value"),
 
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "Invalid Password"),
+
+    COMMON_INVALID_PARAM(HttpStatus.BAD_REQUEST, "Invalid Param"),
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;

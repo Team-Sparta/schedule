@@ -4,10 +4,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
 
 @Getter
-public class UserSignInRequestDto {
+public class UserSignUpRequestDto {
     @NotNull(message = "username must not be null")
     @NotEmpty(message = "username must not be empty")
     private String username;
@@ -17,6 +18,7 @@ public class UserSignInRequestDto {
     @Email(message = "email must be valid")
     private String email;
 
+    @Setter
     @NotNull(message = "password must not be null")
     @NotEmpty(message = "password must not be empty")
     private String password;

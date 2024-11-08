@@ -2,16 +2,13 @@ package com.example.schedule.domain.controller;
 
 import com.example.schedule.common.exception.code.SuccessCode;
 import com.example.schedule.common.response.CommonResponse;
-import com.example.schedule.domain.dto.request.UserSignInRequestDto;
-import com.example.schedule.domain.dto.response.UserResponseDto;
+import com.example.schedule.domain.dto.request.UserSignUpRequestDto;
+import com.example.schedule.domain.dto.response.TokenResponseDto;
 import com.example.schedule.domain.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -20,14 +17,19 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<CommonResponse<UserResponseDto>> register(
-            @Valid @RequestBody UserSignInRequestDto request
+    @PostMapping("/sign-up")
+    public ResponseEntity<CommonResponse<TokenResponseDto>> singUp(
+            @Valid @RequestBody UserSignUpRequestDto request
     ) {
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, userService.register(request));
     }
 
-
+    @PostMapping("/sign-in")
+    public ResponseEntity<CommonResponse<TokenResponseDto>> signIn(
+            @Valid @RequestBody UserSignUpRequestDto request
+    ) {
+        return CommonResponse.success(SuccessCode.SUCCESS_INSERT, userService.singIn(request));
+    }
 }
 
 

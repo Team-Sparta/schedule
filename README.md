@@ -5,10 +5,10 @@
 
 | Feature                             | Method  | URL                    |
 |-------------------------------------| ------- |------------------------|
-| **Sing In**                         | `POST`  | /api/v1/my-info        |
-| **Sign Up**                         | `POST`  | /api/v1/users          |
+| **Sing In**                         | `POST`  | /api/v1/users/sign-in  |
+| **Sign Up**                         | `POST`  | /api/v1/users/sign-up  |
 | **Add Schedule**                    | `POST`  | /api/v1/schedules      |
-| **Get All Schedules**               | `GET`   | /api/v1/schedules     |
+| **Get All Schedules**               | `GET`   | /api/v1/schedules      |
 | **Get Schedule By Id**              | `GET`   | /api/v1/schedules/{id} |
 | **Update Schedule by Id**           | `PUT`   | /api/v1/schedules/{id} |
 | **Update Schedule's Content by Id** | `PATCH` | /api/v1/schedules/{id} |
@@ -17,9 +17,9 @@
 
 ## Sign In
 
-| Method     | URL                                   | 
-| ---------- | ------------------------------------- | 
-| `POST`     | https://localhost:8080/api/v1/my-info | 
+| Method     | URL                                 | 
+| ---------- |-------------------------------------| 
+| `POST`     | https://localhost:8080/api/v1/users | 
 
 ### Request Body
 

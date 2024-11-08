@@ -21,16 +21,12 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    @GetMapping("/all")
-    public ResponseEntity<CommonResponse<ScheduleListResponse>> findAllSchedules(@RequestParam Long userId, @RequestParam Long pageIndex, @RequestParam Integer pageSize) {
-        return CommonResponse.success(SuccessCode.SUCCESS, scheduleService.findSchedules(userId, pageIndex, pageSize));
-    }
-
     @GetMapping
-    public ResponseEntity<CommonResponse<ScheduleListResponse>> findAllSchedulesByUpdatedDate(
-            @RequestParam Long userId,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime updatedDate) {
-        return CommonResponse.success(SuccessCode.SUCCESS, scheduleService.findSchedulesByUpdatedDate(userId, updatedDate));
+    public ResponseEntity<CommonResponse<ScheduleListResponse>> findAllSchedules(@RequestParam Long userId, @RequestParam Long pageIndex, @RequestParam Integer pageSize, @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime updatedDate) {
+        if (updatedDate != null) {
+            return CommonResponse.success(SuccessCode.SUCCESS, scheduleService.findSchedulesByUpdatedDate(userId, updatedDate));
+        }
+        return CommonResponse.success(SuccessCode.SUCCESS, scheduleService.findSchedules(userId, pageIndex, pageSize));
     }
 
     @GetMapping("/{id}")

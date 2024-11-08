@@ -39,7 +39,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Category category = categoryRepository.findCategoryById(id);
 
-
         Schedule schedule = scheduleRepository.saveSchedule(
                 Schedule.builder()
                         .content(scheduleRequestDto.getContent())
@@ -59,6 +58,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         int updatedRow = scheduleRepository.updateScheduleContent(id, scheduleRequestDto.getUserId(), scheduleRequestDto.getContent());
 
+        return getScheduleResponseDto(id, scheduleRequestDto, updatedRow);
+    }
+
+    private ScheduleResponseDto getScheduleResponseDto(Long id, ScheduleRequestDto scheduleRequestDto, int updatedRow) {
         if (updatedRow == 0) {
             throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
         }
@@ -72,12 +75,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         int updatedRow = scheduleRepository.updateSchedule(id, scheduleRequestDto.getUserId(), scheduleRequestDto.getContent(), scheduleRequestDto.getCategoryId(), scheduleRequestDto.getDueDate(), scheduleRequestDto.getPriority(), scheduleRequestDto.getStatus());
 
-        if (updatedRow == 0) {
-            throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
-        }
-
-        Schedule schedule = scheduleRepository.findSchedulesByScheduleId(scheduleRequestDto.getUserId(), id);
-        return new ScheduleResponseDto(schedule.getId(), schedule.getContent(), schedule.getDueDate(), schedule.getPriority(), schedule.getStatus(), new UserResponseDto(schedule.getUser().getId(), schedule.getUser().getUsername(), schedule.getUser().getEmail()), schedule.getCategory(), schedule.getCreatedAt(), schedule.getUpdatedAt());
+        return getScheduleResponseDto(id, scheduleRequestDto, updatedRow);
     }
 
 

@@ -2,7 +2,7 @@ package com.example.schedule.domain.repository.jdbc;
 
 import com.example.schedule.common.exception.BaseException;
 import com.example.schedule.common.exception.code.ErrorCode;
-import com.example.schedule.domain.dto.request.UserSignInRequestDto;
+import com.example.schedule.domain.dto.request.UserSignUpRequestDto;
 import com.example.schedule.domain.dto.response.UserResponseDto;
 import com.example.schedule.domain.entity.User;
 import com.example.schedule.domain.repository.query.UserRepository;
@@ -35,9 +35,13 @@ public class JdbcTemplateUserRepository implements UserRepository {
                     .id(rs.getLong("id"))
                     .username(rs.getString("username"))
                     .email(rs.getString("email"))
+                    .password(rs.getString("email"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
                     .build();
+
+    private static final RowMapper<String> PASSWORD_ROW_MAPPER = (rs, rowNum) ->
+            rs.getString("password");
 
 
     @Override
@@ -47,7 +51,19 @@ public class JdbcTemplateUserRepository implements UserRepository {
     }
 
     @Override
-    public UserResponseDto register(UserSignInRequestDto request) {
+    public User findByUsername(String username) {
+        List<User> query = jdbcTemplate.query("SELECT id, username, email, password, created_at, updated_at FROM users WHERE username = ?", USER_ROW_MAPPER, username);
+        return query.stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+    }
+
+    @Override
+    public User findByUserEmail(String email) {
+        List<User> query = jdbcTemplate.query("SELECT id, username, email, password, created_at, updated_at FROM users WHERE email = ?", USER_ROW_MAPPER, email);
+        return query.stream().findAny().orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+    }
+
+    @Override
+    public Long register(UserSignUpRequestDto request) {
 
         try {
             SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
@@ -60,13 +76,12 @@ public class JdbcTemplateUserRepository implements UserRepository {
 
             Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-            return new UserResponseDto(
-                    key.longValue(),
-                    request.getUsername(),
-                    request.getEmail());
+            return key.longValue();
         } catch (RuntimeException e) {
             log.error(e.getMessage());
             throw new BaseException("", ErrorCode.SQL_DB_ERROR);
         }
     }
+
+
 }

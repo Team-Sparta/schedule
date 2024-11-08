@@ -38,10 +38,11 @@ public class User extends BaseTimeEntity {
 
 
     @Builder
-    public User(Long id, @NotNull String username, @NotNull String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(Long id, @NotNull String username, @NotNull String email, String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.username = username;
         this.email = email;
+        this.password = password;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
